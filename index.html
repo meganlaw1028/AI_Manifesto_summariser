@@ -72,8 +72,19 @@
         <div class="card p-4 large-box h-100">
           <h5 class="mb-3"><i class="fas fa-file-alt"></i> Summarised Text</h5>
           <div id="choice">
-            <button type="button" class="btn btn-outline-primary" onclick="selectSummary('general')" data-toggle="tooltip" title="Generate a general summary of the text.">General</button>
-            <button type="button" class="btn btn-outline-success" onclick="selectSummary('personalise')"data-toggle="tooltip" title="Generate a personalised summary based on selected topics.">Personalise</button>
+            <button type="button" class="btn btn-summary btn-outline-primary" 
+                onclick="selectSummary('general')" 
+                data-toggle="tooltip" 
+                title="Generate a general summary of the text.">
+                General
+            </button>
+
+            <button type="button" class="btn btn-summary btn-outline-success" 
+                onclick="selectSummary('personalise')" 
+                data-toggle="tooltip" 
+                title="Generate a personalised summary based on selected topics.">
+                Personalise
+            </button>
               </div>
                   <br>
                     <select id="topicSelect" class="form-control" onchange="updateTopicSummary()">
@@ -102,6 +113,16 @@
                     <br>
                     <textarea id="summaryText" class="form-control" readonly placeholder="Your summary will appear here..."></textarea>
                     <br>
+                    <div class="text-end">
+                    <button id="expandSummaryBtn" class="btn btn-secondary" onclick="openSummaryModal()">Expand Summary</button>
+                  </div>
+      </div>
+      <div id="summaryModal" class="modal-overlay" onclick="closeSummaryModal()">
+        <div class="modal-content" onclick="event.stopPropagation();">
+          <button class="close-btn" onclick="closeSummaryModal()">×</button>
+          <h4>Full Summary</h4>
+          <p id="fullSummary"></p>
+        </div>
       </div>
       </div>
     </div>
@@ -208,7 +229,28 @@
             return new bootstrap.Tooltip(tooltipTriggerEl);
         });
     });
+
+    // Open Modal & Set Content
+    function openSummaryModal() {
+      let fullSummaryText = document.getElementById("summaryText").value;
+      document.getElementById("fullSummary").innerText = fullSummaryText;
+      document.getElementById("summaryModal").style.display = "flex";
+    }
+
+    // Close Modal
+    function closeSummaryModal() {
+      document.getElementById("summaryModal").style.display = "none";
+    }
+
+    // Close on ESC Key
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape") {
+        closeSummaryModal();
+      }
+    });
+
 </script>
+
   <script>
     const predefinedOutputs = {
         general: "This is the general summary output:\nThis election will shape our country for generation. It is your chance to deliver the real change Britain needs. Labour government will unlock the potential of all those held back for too long. Labour will give the NHS the funding it needs and end privatisation. Whether we are ready or not, we stand on the brink of unstoppable change. Labour will kick-start Green Industrial Revolution that will create one million jobs. Jeremy Corbyn Leader of the Labour Party This election is about the crisis of living standards. The scale of the challenge requires nothing less. Labour will make sure that the costs of the green transition fall fairly and are mostly borne by the wealthy and those most responsible for the problem. The cost of not acting is far greater than the cost of acting. The Conservatives allowed the proceeds of North Sea oil to be squandered on tax cuts for the richest and captured in profits for the few. Public ownership will secure democratic control over national strategic infrastructure and provide collective stewardship for key natural resources. Britain has reduced its emissions at the expense of domestic industry by offshoring production. Labour will take full responsibility for our carbon footprint instead of passing the buck. The Conservatives have allowed Britain to fall behind in the green technologies of the future. Labour will build sustainable, affordable, accessible and integrated transport system. Bus services have been devastated by the Conservatives, despite carrying more people than any other mode of public transport. The Conservatives have committed to ending new sales of combustion engine vehicles. Labour will adopt an ambitious Vision Zero approach to UK road safety. We will invest to make our neglected local roads, pavements and cycleways safer. Labour will provide an extra 5.6 billion in funding to improve the standard of flood defences. Labour has published an ambitious animal welfare manifesto which reiterates our commitments to prohibit foxhunting and end the cull of badgers. In England, we will introduce an animal welfare commissioner, prohibit the sale of snares and glue traps, end the badger cull and ban the keeping of primates as pets. Labour will invest in the NHS to give patients the modern, well- resourced services they need. There are 100,000 staff vacancies in NHS England, including shortage of 43,000 nurses. Every penny spent on privatisation and outsourcing is penny less spent on patient care. Labour will invest more in public health and recruit 4,500 more health visitors and school nurses. Mental Health Labour government will provide an additional 1.6 billion year to ensure new standards for mental health are enshrined in the NHS constitution. Social Care Social care funding cuts have left 1.5 million older people without the care they need. Labour government will build comprehensive National Care Service for England. It will provide community-based, person-centred support, underpinned by principles of ethical care and independent living. Labour will reverse cuts to Sure Start and create new service, Sure Start Plus. All 2, 3 and 4-year-olds will be entitled to 30 hours of free preschool education per week. Parents, communities and even teachers are shut out of decisions about schools. Labour will end fragmentation and marketisation of our school system. Budget and day-to-day decisions will be transferred back to schools. England already faces shortage of people with higher-level technical qualifications. Tuition fees have trebled and maintenance grants have been scrapped. Labour will invest in policing to prevent crime and make our communities safer. Police Labour government will recruit 2,000 more frontline officers than have been planned for by the Conservatives. We will work with police and crime commissioners to reform police funding and share new resources fairly. Labour government will overhaul our national security strategies. Border security prevents serious crimes including child abduction, people trafficking, smuggling of drugs and guns, terrorism and modern day slavery. The Tories have further weakened our borders, cutting another 200 jobs over the last four years. Labour will reverse the Tory decade of austerity for local government. It will aim to restore council spending powers to levels over the lifetime of the Parliament. COMMUNITIES AND LOCAL GOVERNMENT are vital to Labour's democratic transformation of the economy. Labour will stop Crown Post Office closures and bring Royal Mail back into public ownership at the earliest opportunity. Vulnerable children have suffered most, with many left waiting until crisis point for support. Digital connectivity will underpin our future economy. Sport Sport enriches our lives, binds communities together and helps us stay healthy. Labour government will examine the state of the game, its governance and regulation, its ownership rules and the support and funding of the clubs that are vital to local communities. Culture Britains thriving arts, culture and creative industries drive investments and encourage tourism. Labour will curb gambling advertising in sports and introduce new Gambling Act fit for the digital age. Of 14.3 million people in poverty, nine million live in families where at least one adult works. Labour will introduce Real Living Wage of at least 10 per hour for all workers aged 16 and over. Labour will tackle insecurity by Giving everyone full rights from day one on the job. Strengthening protections for whistleblowers and rights against unfair dismissal for all workers. Ending bogus self-employment and creating single status of worker for everyone apart from those genuinely self-employed in business on their own account. Labour will take on short-termism and corporate greed, making sure good businesses are rewarded, not undercut. Britain is one of the richest countries in the world, but under the Tories millions of people cant make ends meet. Labour will deliver gender pay equality by making the state responsible for enforcing equal pay legislation for the first time. Women will no longer be left to take enforcement action by themselves through the courts. Hate crime has more than doubled in the last five years. Labour will ensure that BAME and women business owners have access to government contracts and spending. Create an Emancipation Educational Trust to educate around migration and colonialism. On religious discrimination, we will Strengthen protection for religious communities. Labour will establish humane immigration system and end hostile environment caused by Windrush scandal. Instead, our system will be built on human rights and aimed at meeting skills and labour shortages. The movement of people around the world has enriched our society, economy and culture. Labour will put children at the heart of everything we do. Universal Credit The Tories flagship social security programme, Universal Credit, has been catastrophe. Labour will stop moving people onto it and design an alternative system that treats people with dignity and respect. 400,000 pensioners have been pushed into poverty under the Tories. Generation of women born in the 1950s have had their pension age changed without fair notification. Labour recognises this injustice and will work with these women to design system of recompense for losses and insecurity. Labour will build at an annual rate of at least 150,000 council and social homes. 100,000 of these built by councils for social rent. Private Renters More than 11 million people rent from private landlord. Labour will stop runaway rents by capping them with inflation. Labour will tackle the root causes of rising homelessness with more affordable homes. Homelessness No one should sleep without a roof over their head in one of the richest countries in the world. Under the Tories, the number of people sleeping rough has more than doubled. Labour will change how politics is funded, banning donations from tax avoiders and tax evaders. We will free the voices of civil society by repealing the Lobbying Act and overhauling the rules that govern corporate lobbying. Working with new assembly and power-sharing government, Labour will invest an extra 1.9 billion to end austerity. Labour will invest 6 billion in retrofitting houses across Scotland. This will help tackle climate emergency, end fuel poverty and create 35,000 jobs. The Tories have failed for three years to get Brexit sorted. Labour will rip up the deeply flawed deal negotiated by Boris Johnson. Labour is the only party that can heal the harmful divisions in our communities. It will offer the choice of remaining in the EU, or leaving with sensible deal. This final say referendum will take place within the first six months of Labour government. Labour will introduce War Powers Act to ensure no prime minister can bypass Parliament to commit to conventional military action. We will Immediately suspend the sale of arms to Saudi Arabia for use in Yemen and to Israel for arms used in violation of the human rights of Palestinian civilians. Conservatives have failed to play constructive role in resolving world's most pressing crises. Use our diplomatic expertise to negotiate and deliver more ambitious global targets. Labour is committed to comprehensive peace in the Middle East based on secure Israel. Labour will use Britains influence within the World Bank, IMF and WTO to transform the rules of the global economy so they work for the many. Wealthy countries like the UK bear the greatest responsibility for climate change. We will provide top-up of new and additional spending on international climate finance to bring the total to 4 billion year. Labour will establish an aid-funded Food Sovereignty Fund to enable small-scale farmers. Support sustainable local food and agriculture markets in the fight against climate change. Labour recognises the right to essential medicines as an integral part of the health right.",
