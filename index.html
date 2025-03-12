@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Manifesto Summariser</title>
+  <!-- Bootstrap CSS -->
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <!-- Font Awesome for icons -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+  <!-- link for CSS file -->
+  <link rel="stylesheet" href="style.css">
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
+    rel="stylesheet"
+  />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="#"><i class="fas fa-lightbulb"></i> AI Manifesto Summariser</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"><i class="fas fa-bars"></i></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Powered by advanced NLP and a fine-tuned T5 model, AI Manifesto Summariser delivers concise, insightful, and personalized summaries">
+                <i class="fas fa-info-circle"></i> Features
+            </a>
+        </li>        
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
+  <!-- Loader -->
+  <div id="loader">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+  
+  <!-- Main Content -->
+  <div class="container">
+    <div class="row g-4">
+      <!-- Input Text Area -->
+      <div class="col-md-6">
+        <div class="card p-4 large-box h-100">
+            <h5 class="mb-3"><i class="fas fa-edit"></i> Enter Your Text</h5>
+            <textarea id="inputText" class="form-control" placeholder="This input is disabled during testing." disabled></textarea>
+            <br>
+          <div class="input-group mb-3">
+            <br>
+            <input type="file" class="form-control" id="inputGroupFile02">
+            <label class="input-group-text" for="inputGroupFile02">Upload</label>
+          </div>
+        </div>
+      </div>
+      <!-- Summarised Text -->
+      <div class="col-md-6">
+        <div class="card p-4 large-box h-100">
+          <h5 class="mb-3"><i class="fas fa-file-alt"></i> Summarised Text</h5>
+          <div id="choice">
+            <button type="button" class="btn btn-outline-primary" onclick="selectSummary('general')" data-toggle="tooltip" title="Generate a general summary of the text.">General</button>
+            <button type="button" class="btn btn-outline-success" onclick="selectSummary('personalise')"data-toggle="tooltip" title="Generate a personalised summary based on selected topics.">Personalise</button>
+              </div>
+                  <br>
+                    <select id="topicSelect" class="form-control" onchange="updateTopicSummary()">
+                      <option value="">Select a topic...</option>
+                      <option value="501">01 - Environmental Protection: Positive</option>
+                      <option value="706">02 - Non-economic Demographic Groups</option>
+                      <option value="606">03 - Civic Mindedness: Positive</option>
+                      <option value="504">04 - Welfare State Expansion</option>
+                      <option value="506">05 - Education Expansion</option>
+                      <option value="605">06 - Law and Order: Positive</option>
+                      <option value="301">07 - Federalism</option>
+                      <option value="303">08 - Governmental and Administrative Efficiency</option>
+                      <option value="701">09 - Labour Groups: Positive</option>
+                      <option value="412">10 - Controlled Economy</option>
+                      <option value="503">11 - Equality: Positive</option>
+                      <option value="411">12 - Technology and Infrastructure</option>
+                      <option value="108">13 - European Community/Union: Positive</option>
+                      <option value="101">14 - Foreign Special Relationships: Positive</option>
+                      <option value="107">15 - Internationalism: Positive</option>
+                      <option value="305">16 - Political Authority</option>
+                    </select>
+                    <br>
+                    <div class="text-end">
+                      <button onclick="copySummary()" class="btn btn-secondary">Copy Summary</button>
+                    </div>
+                    <br>
+                    <textarea id="summaryText" class="form-control" readonly placeholder="Your summary will appear here..."></textarea>
+                    <br>
+      </div>
+      </div>
+    </div>
+    <br>
+    <!-- Summarise Button -->
+    <div class="text-center mt-4">
+      <button id="summariseBtn" class="btn-modern" onclick="summariseText()">
+        <i class="fas fa-magic me-2"></i> Summarise Now
+    </button>
+    </div>
+    
+    <!-- Info Cards -->
+    <div class="row mt-5 g-4">
+      <div class="col-md-4">
+          <div class="card p-4 info-card text-center h-100">
+              <i class="fas fa-newspaper"></i>
+              <h5 class="mt-3">CNN Daily Mail Data</h5>
+              <p>Real-world news articles used to train state-of-the-art summarisation models.</p>
+              <p class="small text-muted">Source: CNN &amp; Daily Mail</p>
+          </div>
+      </div>
+      <div class="col-md-4">
+          <div class="card p-4 info-card text-center h-100">
+              <i class="fas fa-brain"></i>
+              <h5 class="mt-3">LLM Transformer Model</h5>
+              <p>Leveraging cutting-edge transformer architectures like T5 for effective summarisation.</p>
+              <p class="small text-muted">Model: Fine-tuned T5</p>
+          </div>
+      </div>
+      <div class="col-md-4">
+          <div class="card p-4 info-card text-center h-100">
+              <i class="fas fa-language"></i>
+              <h5 class="mt-3">Natural Language Processing</h5>
+              <p>Utilising advanced NLP techniques to generate concise and coherent summaries.</p>
+              <p class="small text-muted">Techniques: NLP, Deep Learning</p>
+          </div>
+      </div>
+  </div>
+  
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer mt-5 py-4">
+    <div class="container text-center">
+        <hr class="footer-divider">
+        <h5 class="footer-title">Get in Touch</h5>
+        <p class="footer-text">Feel free to contact us for any queries. We are happy to hear your opinion.</p>
+        
+        <!-- Contact Info -->
+        <p>
+            <i class="fas fa-envelope"></i> 
+            <a href="mailto:kwan.l.law@durham.ac.uk" class="footer-link">  kwan.l.law@durham.ac.uk</a>
+        </p>
+        <p><i class="fas fa-map-marker-alt"></i> Durham University, DH1 3LH</p>
+        
+        <!-- Social Media Icons -->
+        <!--<div class="social-icons">
+            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+        </div>
+      -->
+        <hr class="footer-divider">
+        <p class="small text" style="color:grey;">© 2025 AI Manifesto Summariser. All rights reserved.</p>
+    </div>
+</footer>
+
+
+  
+
+  
+  <!-- Bootstrap JS Bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    $("#summariseBtn").click(function () {
+      var inputText = $("#inputText").val();
+      if (inputText.trim() === "") {
+        alert("The system is currently in the testing phase. Input is disabled, but predefined summaries are available for evaluation. This allows you to assess the quality of the generated summaries! Thank you :)))");
+        return;
+      }
+      // Show loader
+      $("#loader").fadeIn();
+      $.ajax({
+        type: "POST",
+        url: "/summarise",
+        contentType: "application/json",
+        data: JSON.stringify({ text: inputText }),
+        success: function (response) {
+          $("#summaryText").val(response.summary);
+        },
+        error: function () {
+          alert("An error occurred. Please try again.");
+        },
+        complete: function () {
+          $("#loader").fadeOut();
+        }
+      });
+    });
+  </script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
+</script>
+  <script>
+    const predefinedOutputs = {
+        general: "This is the general summary output:\nThis election will shape our country for generation. It is your chance to deliver the real change Britain needs. Labour government will unlock the potential of all those held back for too long. Labour will give the NHS the funding it needs and end privatisation. Whether we are ready or not, we stand on the brink of unstoppable change. Labour will kick-start Green Industrial Revolution that will create one million jobs. Jeremy Corbyn Leader of the Labour Party This election is about the crisis of living standards. The scale of the challenge requires nothing less. Labour will make sure that the costs of the green transition fall fairly and are mostly borne by the wealthy and those most responsible for the problem. The cost of not acting is far greater than the cost of acting. The Conservatives allowed the proceeds of North Sea oil to be squandered on tax cuts for the richest and captured in profits for the few. Public ownership will secure democratic control over national strategic infrastructure and provide collective stewardship for key natural resources. Britain has reduced its emissions at the expense of domestic industry by offshoring production. Labour will take full responsibility for our carbon footprint instead of passing the buck. The Conservatives have allowed Britain to fall behind in the green technologies of the future. Labour will build sustainable, affordable, accessible and integrated transport system. Bus services have been devastated by the Conservatives, despite carrying more people than any other mode of public transport. The Conservatives have committed to ending new sales of combustion engine vehicles. Labour will adopt an ambitious Vision Zero approach to UK road safety. We will invest to make our neglected local roads, pavements and cycleways safer. Labour will provide an extra 5.6 billion in funding to improve the standard of flood defences. Labour has published an ambitious animal welfare manifesto which reiterates our commitments to prohibit foxhunting and end the cull of badgers. In England, we will introduce an animal welfare commissioner, prohibit the sale of snares and glue traps, end the badger cull and ban the keeping of primates as pets. Labour will invest in the NHS to give patients the modern, well- resourced services they need. There are 100,000 staff vacancies in NHS England, including shortage of 43,000 nurses. Every penny spent on privatisation and outsourcing is penny less spent on patient care. Labour will invest more in public health and recruit 4,500 more health visitors and school nurses. Mental Health Labour government will provide an additional 1.6 billion year to ensure new standards for mental health are enshrined in the NHS constitution. Social Care Social care funding cuts have left 1.5 million older people without the care they need. Labour government will build comprehensive National Care Service for England. It will provide community-based, person-centred support, underpinned by principles of ethical care and independent living. Labour will reverse cuts to Sure Start and create new service, Sure Start Plus. All 2, 3 and 4-year-olds will be entitled to 30 hours of free preschool education per week. Parents, communities and even teachers are shut out of decisions about schools. Labour will end fragmentation and marketisation of our school system. Budget and day-to-day decisions will be transferred back to schools. England already faces shortage of people with higher-level technical qualifications. Tuition fees have trebled and maintenance grants have been scrapped. Labour will invest in policing to prevent crime and make our communities safer. Police Labour government will recruit 2,000 more frontline officers than have been planned for by the Conservatives. We will work with police and crime commissioners to reform police funding and share new resources fairly. Labour government will overhaul our national security strategies. Border security prevents serious crimes including child abduction, people trafficking, smuggling of drugs and guns, terrorism and modern day slavery. The Tories have further weakened our borders, cutting another 200 jobs over the last four years. Labour will reverse the Tory decade of austerity for local government. It will aim to restore council spending powers to levels over the lifetime of the Parliament. COMMUNITIES AND LOCAL GOVERNMENT are vital to Labour's democratic transformation of the economy. Labour will stop Crown Post Office closures and bring Royal Mail back into public ownership at the earliest opportunity. Vulnerable children have suffered most, with many left waiting until crisis point for support. Digital connectivity will underpin our future economy. Sport Sport enriches our lives, binds communities together and helps us stay healthy. Labour government will examine the state of the game, its governance and regulation, its ownership rules and the support and funding of the clubs that are vital to local communities. Culture Britains thriving arts, culture and creative industries drive investments and encourage tourism. Labour will curb gambling advertising in sports and introduce new Gambling Act fit for the digital age. Of 14.3 million people in poverty, nine million live in families where at least one adult works. Labour will introduce Real Living Wage of at least 10 per hour for all workers aged 16 and over. Labour will tackle insecurity by Giving everyone full rights from day one on the job. Strengthening protections for whistleblowers and rights against unfair dismissal for all workers. Ending bogus self-employment and creating single status of worker for everyone apart from those genuinely self-employed in business on their own account. Labour will take on short-termism and corporate greed, making sure good businesses are rewarded, not undercut. Britain is one of the richest countries in the world, but under the Tories millions of people cant make ends meet. Labour will deliver gender pay equality by making the state responsible for enforcing equal pay legislation for the first time. Women will no longer be left to take enforcement action by themselves through the courts. Hate crime has more than doubled in the last five years. Labour will ensure that BAME and women business owners have access to government contracts and spending. Create an Emancipation Educational Trust to educate around migration and colonialism. On religious discrimination, we will Strengthen protection for religious communities. Labour will establish humane immigration system and end hostile environment caused by Windrush scandal. Instead, our system will be built on human rights and aimed at meeting skills and labour shortages. The movement of people around the world has enriched our society, economy and culture. Labour will put children at the heart of everything we do. Universal Credit The Tories flagship social security programme, Universal Credit, has been catastrophe. Labour will stop moving people onto it and design an alternative system that treats people with dignity and respect. 400,000 pensioners have been pushed into poverty under the Tories. Generation of women born in the 1950s have had their pension age changed without fair notification. Labour recognises this injustice and will work with these women to design system of recompense for losses and insecurity. Labour will build at an annual rate of at least 150,000 council and social homes. 100,000 of these built by councils for social rent. Private Renters More than 11 million people rent from private landlord. Labour will stop runaway rents by capping them with inflation. Labour will tackle the root causes of rising homelessness with more affordable homes. Homelessness No one should sleep without a roof over their head in one of the richest countries in the world. Under the Tories, the number of people sleeping rough has more than doubled. Labour will change how politics is funded, banning donations from tax avoiders and tax evaders. We will free the voices of civil society by repealing the Lobbying Act and overhauling the rules that govern corporate lobbying. Working with new assembly and power-sharing government, Labour will invest an extra 1.9 billion to end austerity. Labour will invest 6 billion in retrofitting houses across Scotland. This will help tackle climate emergency, end fuel poverty and create 35,000 jobs. The Tories have failed for three years to get Brexit sorted. Labour will rip up the deeply flawed deal negotiated by Boris Johnson. Labour is the only party that can heal the harmful divisions in our communities. It will offer the choice of remaining in the EU, or leaving with sensible deal. This final say referendum will take place within the first six months of Labour government. Labour will introduce War Powers Act to ensure no prime minister can bypass Parliament to commit to conventional military action. We will Immediately suspend the sale of arms to Saudi Arabia for use in Yemen and to Israel for arms used in violation of the human rights of Palestinian civilians. Conservatives have failed to play constructive role in resolving world's most pressing crises. Use our diplomatic expertise to negotiate and deliver more ambitious global targets. Labour is committed to comprehensive peace in the Middle East based on secure Israel. Labour will use Britains influence within the World Bank, IMF and WTO to transform the rules of the global economy so they work for the many. Wealthy countries like the UK bear the greatest responsibility for climate change. We will provide top-up of new and additional spending on international climate finance to bring the total to 4 billion year. Labour will establish an aid-funded Food Sovereignty Fund to enable small-scale farmers. Support sustainable local food and agriculture markets in the fight against climate change. Labour recognises the right to essential medicines as an integral part of the health right.",
+        "501": "The climate crisis ties us all into common fate. This election is our best hope to protect future generations from an uninhabitable planet. Labour led the UK Parliament in declaring climate government will lead the world in fighting it, with plan to drive up living standards by transforming our economy into one low in carbon, rich in good jobs. We are going to have to do more to reduce our carbon footprint and reduce our dependence on fossil fuels, according to Greenpeace. Labour will use the crucial next decade Cutting emissions will drive our transport policies. We will review public expenditure on transport to ensure Conservatives, despite carrying more people than any other mode of public transport. The Intergovernmental global emissions in half by to have chance of keeping global heating within safe limits that means The Tories wasted decade serving the interests of big polluters. It is hoped that this will be the first time Labour has used cutting emissions as a basis for its transport policy. Jeremy Corbyn: We will increase and expand local services, We are facing climate and environment emergency. He says unlike the Tories we will not trade our environment Emergency Bill sets out in law robust, binding new standards for decarbonisation, nature recovery. His polluted air contributes to over 40,000 premature commissioner, prohibits the sale of snares and glue primates as pets. I'll work internationally to end commercial whaling, ban the importation of hunting has the basics.",
+        "706": "Women are especially services by regulating and taking public ownership of buses. Labour will introduce free bus travel for under-25s where councils take control of their buses. Bus workers should be given full legal powers to achieve this cost-effectively, conditions for bus workers. Free bus travel is a key part of Labour's plan to reduce the number of female bus drivers in the UK. The government has been working hard to ensure that bus workers have access to high- quality bus services.",
+        "606": "Jeremy Hunt: Tories create shared experiences and strengthen social bonds. Labour wants society in which people care for one another, but Tories are trying to pitch us against. Under the Tories, the social security system has lost unstuck, he says. Hunt: The Tories have made more about harassment than helping hand, something has gone seriously wrong. In the words of the United Nations, the UKs social safety net has been deliberately removed. Hatred and heartlessness of the Conservatives has gone serious wrong, Hunt says.",
+        "504": ". - To summarise, please click here to read the rest of the article. Thank you for taking the time to read it and thank you for sharing your thoughts on it with all of us in the comments section below. We hope you enjoyed reading it and are looking forward to hearing from you again soon. Thanks for reading our briefing today. I'm happy to say that we've had a lot of fun working with you over the last couple of weeks. We will pay for this by creating fairer taxation system, asking for little more from those with the broadest shoulders. We will reverse some of the Tories cuts to corporation Well ask those who earn more than 80,000 year to pay little more income tax, while freezing National decade of Tory health cuts and privatisations has hospitals are crumbling, equipment is outdated, IT now wait far too long to see their GP, for an ambulance Our immediate task is to repair our health services. Labour government will completely change Department for Social Security. It will be there to help and support people, not punish and police them. system-wide change, so that tragedy like Grenfell never happens again, says Jeremy Corbyn. Tory MPs are calling for an end to discrimination against women in the workplace, he says. corbyn: it's time for social security to be replaced with a more open and transparent system of care and support.",
+        "506": "Tories have starved our education system of funding, transferring costs onto students, staff and pupils. Education lets people develop their talents, overcome injustices and inequalities and helps us understand each other. The Conservatives have cut budgets of schools, disproportionately policy has meant those in most need have lost out. But it isnt just vital to our economy its vital to help prevent illness and enable people to live longer, healthier lives. Read more at the bottom of this page. Our National Education Service will be at the heart of Labours plan for real change. It will provide free education for everyone throughout their lives and will nurture every child and adult. Crime has risen, including violent crimes like knife crime, up 80 in the last five years. The national education service is an important part of Labour's plan to tackle poverty and socialise our country. We are committed to ensuring that all children and adults have access to quality education, says Tony Blair.",
+        "605": "The proportion of offences charged has fallen across all categories. Prosecutions have fallen to record low level. Only 1.4 of reported rapes are prosecuted. Social inequality of crime has increased, as has the end-of-the- epidemic's rise in violent crime. In 2013, more than 11 million crimes were recorded; this year there were over 11 million convictions. Crime is on the decline across violence, drugs, robbery, burglary and vehicle theft. We will invest in our communities and public services to build the stronger, close working relationships between criminal justice agencies with education authorities, health services and others. Prison is not the best place to Protect your rights The crisis in our criminal justice system has left people less able to defend their rights. In addition, we will establish violence-reduction units and ensure vulnerable people get the support they early years services. Our prisons have been the worst place to defend your rights for over a decade. Labour will restore total prison officer numbers to levels, and phase out dangerous lone working. Labour government will bring PFI prisons back in-house and there will be no new. Local councillors live among us, shopping on the same high street, using same parks and leisure centres. Labour's election campaign has been hailed as a positive step towards ending prison violence. Labour is also expected to announce a £20billion budget for the next three years.",
+        "301": "Local councils are vital to Councils are the collective voice of local communities. They are on the frontline in delivering many essential Labour government will halt the cuts and further invest in our Fire and Rescue Service, recruiting at least 5,000 new firefighters. We will learn lessons from the public inquiries into Grenfell and earlier disasters. Our fire and rescue service will continue to recruit as many as 5000 new firefighters every year. It is important to us that we have strong local councils.",
+        "303": "Taskforce will establish in law standards body for fire prevention, protection at all levels. We will reinstate separate governance arrangements for Fire and Rescue Service and police services. The taskforce will not wait for final recommendations dedicated fire controls. It will provide resources for public Fire & Rescue College to ensure that necessary training, Service, evaluating safe staffing levels and consulting on national minimum standards are met. This taskforce is expected to be completed by the end of this year or next. (EN)",
+        "701": "We will give fire services the duty to co-operate Under the Tories, pay has stagnated while insecurity 14.3 million people in poverty, nine million live in families where at least one adult works. Real wages are still lower than before the financial crisis. Labour will eradicate in-work poverty in our first term inequality, such as low pay and high living costs, while raising the floor provided by our social safety net. Our work visa system must fill any skills or labour shortages that arise. Labour will ensure all workers have full and equal rights from including nurses. It is the actions of bad bosses and successive Conservative governments that have driven down wages and working terms and conditions. The movement of people We will take decisive action to regulate the labour conditions, and the exploitation of all workers including migrant workers. Theresa May: 'The movements of people are an important part of Labour's strategy for the future of our country.' She writes: 'We will ensure that every worker has equal rights'",
+        "412": "Labour will cap the total amount that can be paid in overdraft fees. Labour will rapidly introduce Real Living Wage of at least 10 per hour for all workers aged 16 and over. Instead, they have inflicted injustice after injustice on women, Black, Asian and Minority people. 'We need a real living wage to help us get out of debt,' one worker told cnn.co.uk. We need real living wages for all working age groups.",
+        "503": "ToryLib Dems face 85 of the burden of Tory cuts and Equalities. Secretary of State is responsible for ensuring all policies and laws are equality-impact assessed. We will ratify both the Istanbul Convention on preventing Our immigration system must allow us to recruit the families. Tories have been criticised by the Conservatives for their inability to deliver fairer society for women and under-represented groups. A full-time secretary of state will ensure all our policies are equality impact assessed. Everyone knows of someone affected by the housing crisis young people unable to buy first home, renters trapped in damp flats, families stuck on council waiting lists, leasehold home- owners hit by unfair fees, people who are homeless living and We want our political institutions to be connected fully to the wider electorate, and will take urgent steps to The time has come for the real changes that Labour principle in the House of Lords, and work to abolish the House Of Lords in favour of Labours preferred Regions.",
+        "411": "We will introduce 1 billion Fire Safety Fund to fit sprinklers and other fire safety measures in all high- rise council and housing association tower blocks. We will also introduce mandatory building standards and guidance, inspected and enforced by fully trained reaching crisis response teams. Our aim is to reduce the number of fires that can be caused by a fire in a high-rise building or a low-rise residential building.We will introduce a total of $1 billion in funding for this project.",
+        "108": "Tories have failed for three years to get Brexit politicians in Westminster to finally focus on the Labour rules out no-deal Brexit. Jeremy Hunt: We will end the Labour has led the campaign to stop no deal Brexit. Only International peace and security will be primary objective of Labour governments foreign policy, he says. Hunt: The UK will not crash out with no deal; only international peace will be priority of Labour's foreign policy. No-deal Britain is unlikely to happen, Hunt writes.",
+        "101": "Outsourcing of UK foreign policy to US President Establish judge-led inquiry into our countrys Issue formal apology for the Jallianwala Bagh massacre, and hold public review into Britains Allow the people of the Chagos Islands and their sovereignty of our overseas territories, including the Falklands, and for the rights of our citizens and dual-nationals abroad. In addition, we will continue fighting for justice the security challenges facing Britain, including new forms of hybrid, cyber and remote warfare.",
+        "107": "British army personnel have been cut from 102,000 Armed forces and their families have been forced to Labour will use Britains influence within the World. We recognise the need to address historic injustices and will reset our relationships with countries in the Global South based on principles of redistribution imperialist rule. This review will also take account of the climate emergency, and associated threats of resource competition, involuntary Trained army personnel had to be cut from 110,000 Armoured forces Labour International Development DfID, with an aid budget of at least 0.7 of gross national income. We will introduce the reduction of inequality as goal for all aid spending alongside existing poverty reduction. For the Conservatives, too often humanitarian aid is undermined by their disastrous foreign policy, as in Yemen. Under Labour, we will ensure policy coherence across our international- facing departments. Tories, Saudi Arabia and Pakistan are among the most vulnerable countries in the Middle East to receive aid.",
+        "305": "Labour Party, on behalf of the Labour Party. Promoted by Jennie Formby, General Secretary, Southside, 105 Victoria Street, London, SW1E 6QT. Promoted from electronic media, promoted by J.D. Powers and D.J. McAuliffe; Reproduced from Electronic Media at: http://www.london.co.uk/promote/reproduced_f.htm. The Labour Party's official website is www.labourparty.org.",
+    };
+
+    let selectedSummaryType = "general";
+
+    function selectSummary(type) {
+        selectedSummaryType = type;
+        if (type === "personalise") {
+          document.getElementById("topicSelect").style.display = "block"; // Show topic dropdown
+          document.getElementById("topicSelect").selectedIndex = 0; // Reset dropdown selection
+          document.getElementById("summaryText").value = ""; // Clear summary output
+      } else {
+          document.getElementById("topicSelect").style.display = "none"; // Hide topic dropdown
+          document.getElementById("summaryText").value = predefinedOutputs["general"]; // Display general summary
+      }
+    }
+
+    function updateTopicSummary() {
+        const selectedTopic = document.getElementById("topicSelect").value;
+        document.getElementById("summaryText").value = predefinedOutputs[selectedTopic] || "No summary available for this topic.";
+    }
+
+    function copySummary() {
+      var summaryText = document.getElementById("summaryText").value;
+      navigator.clipboard.writeText(summaryText).then(() => {
+          alert("Summary copied to clipboard!");
+      });
+  }
+  
+  </script>
+</body>
+</html>
